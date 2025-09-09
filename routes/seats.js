@@ -1,6 +1,7 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
+// const socket = require('socket.io');
 let db = require('../db');
 
 router.get('/', (req, res) => {
@@ -38,6 +39,8 @@ router.post('/', (req, res) => {
   const { day, seat, client, email } = req.body;
 
   db.seats.push({ id: uuidv4(), day, seat, client, email });
+
+  // TODO: socket on here
 
   res.json({ message: 'OK' });
 });
