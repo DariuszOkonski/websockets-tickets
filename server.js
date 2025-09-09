@@ -1,13 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const socketIO = require('socket.io');
+const path = require('path');
 const testimonialsRoutes = require('./routes/testimonials');
 const concertsRoutes = require('./routes/concerts');
 const seatsRoutes = require('./routes/seats');
 
 const app = express();
-
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -27,14 +26,13 @@ app.get('/{*any}', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 8000;
+
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
 const io = socketIO(server);
 
-console.log('connection before');
 io.on('connection', (socket) => {
-  console.log('connection is on: ', socket.id);
+  console.log('CONNECTION: ', socket.id);
 });
-console.log('connection after');

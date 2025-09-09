@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Progress, Alert } from 'reactstrap';
 import io from 'socket.io-client';
@@ -12,7 +12,7 @@ import './SeatChooser.scss';
 const TIME_STAMP = 120 * 1000;
 
 const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
-  const [socket, setSocket] = useEffect();
+  const [socket, setSocket] = useState();
 
   const dispatch = useDispatch();
   const seats = useSelector(getSeats);
@@ -27,7 +27,10 @@ const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
       process.env.NODE_ENV === 'production' ? '' : 'ws://localhost:8000',
       { transports: ['websocket'] }
     );
+
     setSocket(socket);
+
+    // console.log('process: ', process.env.NODE_ENV);
 
     return () => {
       socket.disconnect();
