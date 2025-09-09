@@ -6,6 +6,7 @@ import {
   getSeats,
   loadSeatsRequest,
   getRequests,
+  loadSeats,
 } from '../../../redux/seatsRedux';
 import './SeatChooser.scss';
 
@@ -30,21 +31,13 @@ const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
 
     setSocket(socket);
 
-    // console.log('process: ', process.env.NODE_ENV);
+    socket.on('seatsUpdated', (seats) => {
+      dispatch(loadSeats(seats));
+    });
 
     return () => {
       socket.disconnect();
     };
-  }, []);
-
-  // TODO: this useEffect has to be removed
-  useEffect(() => {
-    const intervalIndex = setInterval(async () => {
-      await dispatch(loadSeatsRequest());
-    }, TIME_STAMP);
-
-    return () => clearInterval(intervalIndex);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isTaken = (seatId) => {

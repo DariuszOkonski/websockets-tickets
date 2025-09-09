@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
 
   db.seats.push({ id: uuidv4(), day, seat, client, email });
 
-  // TODO: socket on here
+  req.io.emit('seatsUpdated', db.seats);
 
   res.json({ message: 'OK' });
 });
