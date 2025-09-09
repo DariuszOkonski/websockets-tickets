@@ -1,7 +1,7 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
-// const socket = require('socket.io');
+// const socketIO = require('socket.io');
 let db = require('../db');
 
 router.get('/', (req, res) => {

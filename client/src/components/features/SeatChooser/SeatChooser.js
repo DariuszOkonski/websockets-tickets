@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Progress, Alert } from 'reactstrap';
+import io from 'socket.io-client';
 import {
   getSeats,
   loadSeatsRequest,
@@ -11,6 +12,8 @@ import './SeatChooser.scss';
 const TIME_STAMP = 120 * 1000;
 
 const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
+  const [socket, setSocket] = useEffect();
+
   const dispatch = useDispatch();
   const seats = useSelector(getSeats);
   const requests = useSelector(getRequests);
@@ -19,6 +22,19 @@ const SeatChooser = ({ chosenDay, chosenSeat, updateSeat }) => {
     dispatch(loadSeatsRequest());
   }, [dispatch]);
 
+  useEffect(() => {
+    const socket = io(
+      process.env.NODE_ENV === 'production' ? '' : 'ws://localhost:8000',
+      { transports: ['websocket'] }
+    );
+    setSocket(socket);
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  // TODO: this useEffect has to be removed
   useEffect(() => {
     const intervalIndex = setInterval(async () => {
       await dispatch(loadSeatsRequest());
