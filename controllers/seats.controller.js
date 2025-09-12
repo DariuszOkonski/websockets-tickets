@@ -59,11 +59,11 @@ const createSeat = async (req, res) => {
     const newSeat = new Seats({ day, seat, client, email });
     newSeat.save();
 
-    req.io.emit('seatsUpdated', db.seats);
+    req.io.emit('seatsUpdated', seats);
 
     res.json({ message: 'OK' });
   } catch (error) {
-    return res.status(500).json({ message: error });
+    return res.status(500).json({ message: error.message });
   }
 };
 
