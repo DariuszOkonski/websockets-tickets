@@ -1,5 +1,6 @@
 const Seats = require('../models/seat.model');
 const mongoose = require('mongoose');
+const sanitize = require('mongo-sanitize');
 
 const getAll = async (req, res) => {
   try {
@@ -43,18 +44,23 @@ const createSeat = async (req, res) => {
       return res.status(400).json({ message: 'missing some data' });
     }
 
+    // sanitize here
+    const day = sanitize(req.body.day);
+    const seat = sanitize(req.body.seat);
+    const client = sanitize(req.body.client);
+    const email = sanitize(req.body.email);
+
     const seats = await Seats.find();
 
     const isSeatAlreadyTaken = seats.some(
-      ({ seat, day }) =>
-        seat === Number(req.body.seat) && day === Number(req.body.day)
+      ({ seat, day }) => seat === Number(seat) && day === Number(day)
     );
 
     if (isSeatAlreadyTaken) {
       return res.status(409).json({ message: 'The slot is already taken...' });
     }
 
-    const { day, seat, client, email } = req.body;
+    // const { day, seat, client, email } = req.body;
 
     const newSeat = new Seats({ day, seat, client, email });
     newSeat.save();
