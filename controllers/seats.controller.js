@@ -53,7 +53,7 @@ const createSeat = async (req, res) => {
     const seats = await Seats.find();
 
     const isSeatAlreadyTaken = seats.some(
-      ({ seat, day }) => seat === Number(seat) && day === Number(day)
+      (item) => item.seat === Number(seat) && item.day === Number(day)
     );
 
     if (isSeatAlreadyTaken) {
